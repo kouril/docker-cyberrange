@@ -3,7 +3,7 @@ config:
 networks:
 - config:
     bridge.mtu: "1300"
-    ipv4.address: {{ ipv4_address }}
+    ipv4.address: {{ lxd_ipv4_address }}
     ipv4.dhcp.ranges: {{ ipv4_dhcp_range }}
     ipv4.nat: "true"
     ipv6.address: none
