@@ -20,6 +20,12 @@
         name: ansible
         update_cache: yes
 
+    - name: Adapt SSH client configuration
+      copy:
+        src: ssh_config.conf
+        dest: /etc/ssh/ssh_config.d/training.conf
+        owner: root
+
   roles:
     - role: common
 
