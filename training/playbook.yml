@@ -6,6 +6,7 @@
 
   vars_files:
     - "vars/root_ssh_keys.yml"
+    - "vars/training_network.yml"
 
   tasks:
     - name: Prepare Ansible playbook for the second stage
@@ -19,7 +20,6 @@
         name: ansible
         update_cache: yes
 
-
   roles:
     - role: common
 
@@ -31,16 +31,8 @@
             ssh_key: "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAyVFeFqVtCp0K/OxJZmBciW4NZnTM6flt2Fh7/iucRZERZkPMIJtvFlsIJTIj+79AVw1jYqVOvgOrpynOn/h3c8rfvEL96scI+xR+4BXUkijmYC7ldrBGzzOqlfWVhxHwPlc0xWXHLcEMdwBkdcQ3AFilK6M+PdFo0Ma+P8FQECCYzrmXAn9aUq0kyfn0qr49O6+U2mUiUJSaupG1C+kjcjpC0UE/5jp0ckFPKyrZ9uwNjpFMBigLRyroUiYDuXPxF7LQ2oP8U2jKC/9MZFOXyWPb/OkhsNV6KLH8WoTLNCynmNOGa02b5SyujypD6vLAUO327AZ6a/Byg0iN4OHEuw== kouril@ics.muni.cz"
 
     - role: lxd
-      vars:
-        lxd_ipv4_address: 10.0.10.1/24
-        ipv4_dhcp_range: 10.0.10.100-10.0.10.254
-
     - role: lxd-container
       vars:
-        ssh_keys:
-          - "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAyVFeFqVtCp0K/OxJZmBciW4NZnTM6flt2Fh7/iucRZERZkPMIJtvFlsIJTIj+79AVw1jYqVOvgOrpynOn/h3c8rfvEL96scI+xR+4BXUkijmYC7ldrBGzzOqlfWVhxHwPlc0xWXHLcEMdwBkdcQ3AFilK6M+PdFo0Ma+P8FQECCYzrmXAn9aUq0kyfn0qr49O6+U2mUiUJSaupG1C+kjcjpC0UE/5jp0ckFPKyrZ9uwNjpFMBigLRyroUiYDuXPxF7LQ2oP8U2jKC/9MZFOXyWPb/OkhsNV6KLH8WoTLNCynmNOGa02b5SyujypD6vLAUO327AZ6a/Byg0iN4OHEuw== kouril@ics.muni.cz"
-        dns_nameservers: 10.0.10.1
-        ipv4_gateway: 10.0.10.1
         containers:
           - name: stage1
             ipv4_address: 10.0.10.10
