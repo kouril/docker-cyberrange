@@ -1,0 +1,13 @@
+---
+- name: Install the LXD package
+  apt:
+    name: lxd
+    state: present
+    update_cache: yes
+
+- name: Initialize LXD
+  vars:
+    lxd_conf: "{{ lookup('template', 'configuration.yml') }}"
+  shell:
+    cmd: lxd init --preseed
+    stdin: "{{ lxd_conf }}"

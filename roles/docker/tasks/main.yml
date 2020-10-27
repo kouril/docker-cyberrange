@@ -1,0 +1,47 @@
+---
+- name: Install gpg
+  apt:
+    name: gpg
+    update_cache: yes
+
+- name: Add the Docker repository key
+  apt_key:
+    url: https://download.docker.com/linux/debian/gpg
+    id: 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
+
+- name: Add Docker repository
+  apt_repository:
+    repo: deb https://download.docker.com/linux/debian buster stable
+
+- name: Install Docker
+  apt:
+    name: [ docker-ce, docker-ce-cli, containerd.io ]
+    update_cache: yes
+
+- name: Add uid mapping
+  lineinfile:
+    path: /etc/subuid
+    regexp: '^nobody:'
+    line: nobody:886432:65536
+
+- name: Add gid mapping
+  lineinfile:
+    path: /etc/subgid
+    regexp: '^nogroup:'
+    line: nogroup:886432:65536
+
+- name: Configure Docker
+  template:
+    src: daemon.json.j2
+    dest: /etc/docker/daemon.json
+    owner: root
+  notify: "restart docker"
+
+- name: Ensure Docker is running
+  service:
+    name: docker
+    state: started
+
+- name: Define a bridged network
+  shell:
+    cmd: docker network create -d macvlan -o parent=eth0 --subnet={{ ipv4_subnet }} --gateway={{ ipv4_gateway }} external_bridged

@@ -1,0 +1,25 @@
+---
+- name: Check whether the containers are running
+  shell: lxc info {{ item }} > /dev/null 2>&1
+  ignore_errors: yes
+  register: container_{{ item }}
+  loop: "{{ containers }}"
+
+#- name: Start LXC container
+#  vars:
+#    config: "{{ lookup('template', 'container-config.yml') }}"
+#  shell:
+#    cmd: lxc launch "{{ image }}" "{{ container_name }}"
+#    stdin: "{{ config }}"
+#  when: container_{{ item }} is undefined
+#  loop: "{{ containers }}"
+
+- name: Start LXC containers
+  vars:
+     config: "{{ lookup('template', 'container-config.yml') }}"
+  shell:
+    cmd: lxc launch "{{ item.image }}" "{{ item.name }}"
+    stdin: "{{ config }}"
+  when: container_{{ item.name }} is undefined
+  loop: "{{ containers }}"
+

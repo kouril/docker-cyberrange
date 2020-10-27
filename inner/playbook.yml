@@ -1,0 +1,36 @@
+---
+
+- hosts: all
+  become: yes
+
+  pre_tasks:
+    - name: Debian 10 required
+      assert:
+        that:
+          - ansible_distribution == "Debian"
+          - ansible_distribution_major_version == "10"
+        msg: "Debian 10 is required"
+
+    - name: Install dependencies
+      apt:
+        name: python3-apt
+        update_cache: yes
+
+  roles:
+
+    - role: common
+      vars:
+        root_ssh_keys:
+          - "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAyVFeFqVtCp0K/OxJZmBciW4NZnTM6flt2Fh7/iucRZERZkPMIJtvFlsIJTIj+79AVw1jYqVOvgOrpynOn/h3c8rfvEL96scI+xR+4BXUkijmYC7ldrBGzzOqlfWVhxHwPlc0xWXHLcEMdwBkdcQ3AFilK6M+PdFo0Ma+P8FQECCYzrmXAn9aUq0kyfn0qr49O6+U2mUiUJSaupG1C+kjcjpC0UE/5jp0ckFPKyrZ9uwNjpFMBigLRyroUiYDuXPxF7LQ2oP8U2jKC/9MZFOXyWPb/OkhsNV6KLH8WoTLNCynmNOGa02b5SyujypD6vLAUO327AZ6a/Byg0iN4OHEuw== kouril@ics.muni.cz"
+
+    - role: users
+      vars:
+        users: 
+          - name: "training"
+            passwd: "strudl"
+            ssh_key: "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAyVFeFqVtCp0K/OxJZmBciW4NZnTM6flt2Fh7/iucRZERZkPMIJtvFlsIJTIj+79AVw1jYqVOvgOrpynOn/h3c8rfvEL96scI+xR+4BXUkijmYC7ldrBGzzOqlfWVhxHwPlc0xWXHLcEMdwBkdcQ3AFilK6M+PdFo0Ma+P8FQECCYzrmXAn9aUq0kyfn0qr49O6+U2mUiUJSaupG1C+kjcjpC0UE/5jp0ckFPKyrZ9uwNjpFMBigLRyroUiYDuXPxF7LQ2oP8U2jKC/9MZFOXyWPb/OkhsNV6KLH8WoTLNCynmNOGa02b5SyujypD6vLAUO327AZ6a/Byg0iN4OHEuw== kouril@ics.muni.cz"
+
+    - role: docker
+      vars:
+        ipv4_subnet: 10.0.10.0/24
+        ipv4_gateway: 10.0.10.1
