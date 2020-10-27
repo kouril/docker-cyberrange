@@ -4,6 +4,7 @@
     name: lxd
     state: present
     update_cache: yes
+  register: lxd
 
 - name: Initialize LXD
   vars:
@@ -11,3 +12,4 @@
   shell:
     cmd: lxd init --preseed
     stdin: "{{ lxd_conf }}"
+  when: lxd.changed
