@@ -1,9 +1,12 @@
-#!/bin/sh
+#!/usr/bin/python3
 
-cat <<EOF
-{
-  "containers": [
-      "stage1"
-  ]
-}
-EOF
+import json
+import subprocess
+
+result = subprocess.run(['lxc', 'ls', '--format', 'csv'], stdout=subprocess.PIPE, check=True)
+
+containers = []
+for line in result.stdout.decode('utf8').splitlines():
+    containers.append(line.split(',')[0])
+
+print(json.dumps({ 'containers' : containers }))
