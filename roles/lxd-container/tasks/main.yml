@@ -21,6 +21,11 @@
   when: not item.name|string in ansible_facts['ansible_local']['lxc']['containers']
   loop: "{{ containers }}"
 
+- name: Create /etc/hosts records
+  lineinfile:
+    path: /etc/hosts
+    line: "{{ item.ipv4_address }} {{ item.name }}"
+  loop: "{{ containers }}"
 
 #- name: Create a container
 #  vars:
