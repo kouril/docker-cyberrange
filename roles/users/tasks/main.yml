@@ -4,6 +4,13 @@
     path: /etc/ssh/sshd_config
     regex: ^ChallengeResponseAuthentication
     line: ChallengeResponseAuthentication yes
+  register: sshd_config
+
+- name: Restart ssh server
+  service:
+    name: ssh
+    state: restarted
+  when: sshd_config.changed
 
 - include_tasks: create_user.yml
   loop: "{{ users }}"
