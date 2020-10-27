@@ -28,7 +28,7 @@
         users: 
           - name: "training"
             passwd: "strudl"
-            ssh_key: "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAyVFeFqVtCp0K/OxJZmBciW4NZnTM6flt2Fh7/iucRZERZkPMIJtvFlsIJTIj+79AVw1jYqVOvgOrpynOn/h3c8rfvEL96scI+xR+4BXUkijmYC7ldrBGzzOqlfWVhxHwPlc0xWXHLcEMdwBkdcQ3AFilK6M+PdFo0Ma+P8FQECCYzrmXAn9aUq0kyfn0qr49O6+U2mUiUJSaupG1C+kjcjpC0UE/5jp0ckFPKyrZ9uwNjpFMBigLRyroUiYDuXPxF7LQ2oP8U2jKC/9MZFOXyWPb/OkhsNV6KLH8WoTLNCynmNOGa02b5SyujypD6vLAUO327AZ6a/Byg0iN4OHEuw== kouril@ics.muni.cz"
+            ssh_priv_key_path: "ssh/user"
 
     - role: lxd
     - role: lxd-container
