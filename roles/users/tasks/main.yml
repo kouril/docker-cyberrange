@@ -8,7 +8,7 @@
 - name: Add system users
   user:
     name: "{{ item.name }}"
-    password: "{{ item.passwd  | password_hash('sha512') }}"
+    password: "{{ item.passwd  | password_hash('sha512', 'zasoleno') }}"
     shell: "/bin/bash"
     state: present
   loop: "{{ users }}"
