@@ -1,25 +1,31 @@
 ---
-- name: Check whether the containers are running
-  shell: lxc info {{ item }} > /dev/null 2>&1
-  ignore_errors: yes
-  register: container_{{ item }}
-  loop: "{{ containers }}"
+- name: "Create custom fact directory"
+  file:
+    path: "/etc/ansible/facts.d"
+    state: "directory"
 
-#- name: Start LXC container
-#  vars:
-#    config: "{{ lookup('template', 'container-config.yml') }}"
-#  shell:
-#    cmd: lxc launch "{{ image }}" "{{ container_name }}"
-#    stdin: "{{ config }}"
-#  when: container_{{ item }} is undefined
-#  loop: "{{ containers }}"
+- name: "Insert custom fact file to check LXC containers"
+  copy:
+    src: lxc.fact
+    dest: /etc/ansible/facts.d/lxc.fact
+    mode: 0755
 
-- name: Start LXC containers
+- name: Reload ansible_local
+  setup: filter=ansible_local
+
+- name: Create a container
   vars:
-     config: "{{ lookup('template', 'container-config.yml') }}"
-  shell:
-    cmd: lxc launch "{{ item.image }}" "{{ item.name }}"
-    stdin: "{{ config }}"
-  when: container_{{ item.name }} is undefined
+     lxcconfig: "{{ lookup('template', 'container-config.yml') }}"
+  community.general.lxd_container:
+    name: "{{ item.name }}"
+    state: started
+    config: "{{ lxcconfig }}"
+    source:
+      type: image
+      mode: pull
+      server: https://images.linuxcontainers.org
+      protocol: lxd # if you get a 404, try setting protocol: simplestreams
+      alias: ubuntu/xenial/amd64
+  when: not item.name|string in ansible_facts['ansible_local']['lxc']['containers']
+# when: not {{ item.name }} in ... -> yeilds a warning about jinja2 templating used
   loop: "{{ containers }}"
-

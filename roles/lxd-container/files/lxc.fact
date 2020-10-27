@@ -1,0 +1,9 @@
+#!/bin/sh
+
+cat <<EOF
+{
+  "containers": [
+      "stage1"
+  ]
+}
+EOF
