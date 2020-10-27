@@ -14,18 +14,27 @@
   setup: filter=ansible_local
 
 - name: Create a container
-  vars:
-     lxcconfig: "{{ lookup('template', 'container-config.yml') }}"
-  community.general.lxd_container:
-    name: "{{ item.name }}"
-    state: started
-    config: "{{ lxcconfig }}"
-    source:
-      type: image
-      mode: pull
-      server: https://images.linuxcontainers.org
-      protocol: lxd # if you get a 404, try setting protocol: simplestreams
-      alias: ubuntu/xenial/amd64
-  when: not item.name|string in ansible_facts['ansible_local']['lxc']['containers']
+  shell:
+    cmd: lxc launch {{ item.image }} {{ item.name }}
+    stdin: "{{ lookup('template', 'container-config.yml') }}"
 # when: not {{ item.name }} in ... -> yeilds a warning about jinja2 templating used
+  when: not item.name|string in ansible_facts['ansible_local']['lxc']['containers']
   loop: "{{ containers }}"
+
+
+#- name: Create a container
+#  vars:
+#     lxcconfig: "{{ lookup('template', 'container-config.yml') }}"
+#  community.general.lxd_container:
+#    name: "{{ item.name }}"
+#    state: started
+#    config: "{{ lxcconfig }}"
+#    source:
+#      type: image
+#      mode: pull
+#      server: https://images.linuxcontainers.org
+#      protocol: lxd # if you get a 404, try setting protocol: simplestreams
+#      alias: ubuntu/xenial/amd64
+#  when: not item.name|string in ansible_facts['ansible_local']['lxc']['containers']
+## when: not {{ item.name }} in ... -> yeilds a warning about jinja2 templating used
+#  loop: "{{ containers }}"
