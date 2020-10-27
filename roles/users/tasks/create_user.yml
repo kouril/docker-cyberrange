@@ -1,0 +1,26 @@
+---
+- name: Add user to system
+  user:
+    name: "{{ item.name }}"
+    password: "{{ item.passwd  | password_hash('sha512', 'zasoleno') }}"
+    shell: "/bin/bash"
+    state: present
+
+- name: Create user's SSH directory
+  file:
+    path: "/home/{{ item.name }}/.ssh"
+    state: directory
+
+- name: Drop user's SSH private keys
+  copy:
+    src: "{{ item.ssh_priv_key_path }}"
+    dest: "/home/{{ item.name }}/.ssh/id_rsa"
+    mode: 0600
+    owner: "{{ item.name }}"
+
+- name: Allow user's SSH access
+  authorized_key:
+    user: "{{ item.name }}"
+    state: present
+    key: "{{ item.ssh_key }}"
+  when: item.ssh_key is defined

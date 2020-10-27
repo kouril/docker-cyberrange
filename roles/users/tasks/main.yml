@@ -5,17 +5,5 @@
     regex: ^ChallengeResponseAuthentication
     line: ChallengeResponseAuthentication yes
 
-- name: Add system users
-  user:
-    name: "{{ item.name }}"
-    password: "{{ item.passwd  | password_hash('sha512', 'zasoleno') }}"
-    shell: "/bin/bash"
-    state: present
-  loop: "{{ users }}"
-
-- name: Add SSH for users
-  authorized_key:
-    user: "{{ item.name }}"
-    state: present
-    key: "{{ item.ssh_key }}"
+- include_tasks: create_user.yml
   loop: "{{ users }}"
