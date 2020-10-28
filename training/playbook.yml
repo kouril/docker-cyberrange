@@ -6,6 +6,7 @@
   vars_files:
     - "vars/root_ssh_keys.yml"
     - "vars/training_network.yml"
+    - "vars/training_nodes.yml"
 
   tasks:
     - name: Prepare Ansible playbook for the second stage
@@ -38,13 +39,3 @@
 
     - role: lxd
     - role: lxd-container
-      vars:
-        containers:
-          - name: stage1
-            ipv4_address: 10.0.10.10
-            image: images:debian/buster/cloud
-            type: lxd
-          - name: stage2
-            ipv4_address: 10.0.10.11
-            image: images:debian/buster/cloud
-            type: lxd
