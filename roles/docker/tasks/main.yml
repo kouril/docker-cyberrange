@@ -42,6 +42,21 @@
     name: docker
     state: started
 
+- name: "Create custom fact directory"
+  file:
+    path: "/etc/ansible/facts.d"
+    state: "directory"
+
+- name: "Insert custom fact file to check Docker"
+  copy:
+    src: docker.fact
+    dest: /etc/ansible/facts.d/docker.fact
+    mode: 0755
+
+- name: Reload ansible_local
+  setup: filter=ansible_local
+
 - name: Define a bridged network
   shell:
     cmd: docker network create -d macvlan -o parent=eth0 --subnet={{ ipv4_subnet }} --gateway={{ ipv4_gateway }} external_bridged
+  when: not "external_bridged" in ansible_facts['ansible_local']['docker']['networks']

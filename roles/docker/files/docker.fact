@@ -1,0 +1,16 @@
+#!/usr/bin/python3
+  
+import json
+import subprocess
+
+result = subprocess.run(['docker', 'network', 'ls'], stdout=subprocess.PIPE, check=True)
+
+networks = []
+first = True
+for line in result.stdout.decode('utf8').splitlines():
+    if first:
+        first = False
+        continue
+    networks.append(line.split()[1])
+
+print(json.dumps({ 'networks' : networks }))
