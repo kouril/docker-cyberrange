@@ -37,10 +37,13 @@
     owner: root
   notify: "restart docker"
 
+  # if the server isn't restarted now, the network definition diseppeaer after the
+  # next restart
 - name: Ensure Docker is running
   service:
     name: docker
-    state: started
+    enabled: yes
+    state: restarted
 
 - name: "Create custom fact directory"
   file:
