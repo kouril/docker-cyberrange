@@ -2,19 +2,25 @@
 - name: Add user to system
   user:
     name: "{{ item.name }}"
-    password: "{{ item.passwd  | password_hash('sha512', 'zasoleno') }}"
     shell: "/bin/bash"
     state: present
+  register: user_created
+
+- name: Change the user's password
+  user:
+    name: "{{ item.name }}"
+    password: "{{ item.passwd  | password_hash('sha512', 'zasoleno') }}"
+  when: item.passwd is defined
 
 - name: Create user's SSH directory
   file:
-    path: "/home/{{ item.name }}/.ssh"
+    path: "{{ user_created.home }}/.ssh"
     state: directory
 
 - name: Drop user's SSH private keys
   copy:
     src: "{{ item.ssh_priv_key_path }}"
-    dest: "/home/{{ item.name }}/.ssh/id_rsa"
+    dest: "{{ user_created.home }}/.ssh/id_rsa"
     mode: 0600
     owner: "{{ item.name }}"
   when: item.ssh_priv_key_path is defined
