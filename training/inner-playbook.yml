@@ -24,12 +24,12 @@
 
     - role: common
 
+    - role: docker
+
     - role: users
       vars:
         users: 
           - name: "training"
             passwd: "strudl"
             ssh_key: "{{ lookup('file', 'ssh/user.pub') }}"
-            group: "docker"
-
-    - role: docker
+            groups: "docker"
