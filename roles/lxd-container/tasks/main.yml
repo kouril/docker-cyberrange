@@ -18,7 +18,9 @@
     cmd: lxc launch {{ item.image }} {{ item.name }}
     stdin: "{{ lookup('template', 'container-config.yml') }}"
 # when: not {{ item.name }} in ... -> yeilds a warning about jinja2 templating used
-  when: not item.name|string in ansible_facts['ansible_local']['lxc']['containers']
+  when:
+    - not item.name|string in ansible_facts['ansible_local']['lxc']['containers']
+    - item.type == "lxd"
   loop: "{{ containers }}"
 
 - name: Create /etc/hosts records
