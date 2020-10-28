@@ -13,14 +13,6 @@
         repo: root@192.168.4.26:/root/deployment.git
         dest: /root/deployment
 
-#    - name: Prepare Ansible playbook for the second stage
-#      copy:
-#        src: "{{ item }}"
-#        dest: /root/deployment/
-#        owner: root
-#      with_fileglob:
-#        - ../
-
     - name: Install Ansible
       apt:
         name: ansible
