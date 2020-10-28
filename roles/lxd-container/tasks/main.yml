@@ -23,12 +23,6 @@
     - item.type == "lxd"
   loop: "{{ containers }}"
 
-- name: Create /etc/hosts records
-  lineinfile:
-    path: /etc/hosts
-    line: "{{ item.ipv4_address }} {{ item.name }}"
-  loop: "{{ containers }}"
-
 #- name: Create a container
 #  vars:
 #     lxcconfig: "{{ lookup('template', 'container-config.yml') }}"
