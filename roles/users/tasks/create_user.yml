@@ -12,6 +12,13 @@
     password: "{{ item.passwd  | password_hash('sha512', 'zasoleno') }}"
   when: item.passwd is defined
 
+- name: Add the user to group
+  user:
+    name: "{{ item.name }}"
+    append: yes
+    groups: "{{ item.groups }}"
+  when: item.groups is defined
+
 - name: Create user's SSH directory
   file:
     path: "{{ user_created.home }}/.ssh"
