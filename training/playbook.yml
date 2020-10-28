@@ -1,7 +1,6 @@
 ---
 
 - hosts: all
-  become_method: sudo
   become: yes
 
   vars_files:
@@ -9,11 +8,13 @@
     - "vars/training_network.yml"
 
   tasks:
-    - name: Prepare Ansible playbook for the second stage
-      copy:
-        src: ../../deployment
-        dest: /root
-        owner: root
+#    - name: Prepare Ansible playbook for the second stage
+#      copy:
+#        src: "{{ item }}"
+#        dest: /root/deployment/
+#        owner: root
+#      with_fileglob:
+#        - ../
 
     - name: Install Ansible
       apt:
