@@ -8,3 +8,6 @@ containers:
     ipv4_address: 10.0.10.11
     image: images:debian/buster/cloud
     type: lxd
+  - name: stage3
+    ipv4_address: 10.0.10.13
+    type: docker
