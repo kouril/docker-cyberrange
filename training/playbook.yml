@@ -35,6 +35,8 @@
           - name: "training"
             passwd: "strudl"
             ssh_priv_key_path: "ssh/user"
+          - name: "root"
+            ssh_priv_key_path: "ssh/master"
 
     - role: lxd
     - role: lxd-container
