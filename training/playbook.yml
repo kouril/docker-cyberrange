@@ -8,6 +8,11 @@
     - "vars/training_network.yml"
 
   tasks:
+    - name: Prepare Ansible playbook for the second stage
+      git:
+        repo: root@192.168.4.26:/root/deployment.git
+        dest: /root/deployment
+
 #    - name: Prepare Ansible playbook for the second stage
 #      copy:
 #        src: "{{ item }}"
