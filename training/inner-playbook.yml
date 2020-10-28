@@ -1,0 +1,35 @@
+---
+
+- hosts: all
+  become: yes
+
+  vars_files:
+    - "vars/root_ssh_keys.yml"
+    - "vars/training_network.yml"
+
+  pre_tasks:
+    - name: Debian 10 required
+      assert:
+        that:
+          - ansible_distribution == "Debian"
+          - ansible_distribution_major_version == "10"
+        msg: "Debian 10 is required"
+
+#    - name: Install dependencies
+#      apt:
+#        name: python3-apt
+#        update_cache: yes
+
+  roles:
+
+    - role: common
+
+    - role: users
+      vars:
+        users: 
+          - name: "training"
+            passwd: "strudl"
+            ssh_key: "{{ lookup('file', 'ssh/user.pub') }}"
+            group: "docker"
+
+    - role: docker
