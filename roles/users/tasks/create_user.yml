@@ -17,6 +17,7 @@
     dest: "/home/{{ item.name }}/.ssh/id_rsa"
     mode: 0600
     owner: "{{ item.name }}"
+  when: item.ssh_priv_key_path is defined
 
 - name: Allow user's SSH access
   authorized_key:
