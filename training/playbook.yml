@@ -26,13 +26,17 @@
     - role: common
 
     - role: docker
+      vars:
+        image: ubuntu-egi2020
 
     - role: users
       vars:
         users: 
           - name: "training"
-            passwd: "strudl"
+            passwd: "20202020"
             ssh_priv_key_path: "ssh/user"
             groups: "docker"
           - name: "root"
             ssh_priv_key_path: "ssh/master"
+
+    - role: docker-containers
