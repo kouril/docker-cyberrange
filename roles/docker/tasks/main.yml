@@ -13,12 +13,12 @@
     regexp: '^nogroup:'
     line: nogroup:886432:65536
 
-- name: Configure Docker
-  template:
-    src: daemon.json.j2
-    dest: /etc/docker/daemon.json
-    owner: root
-  notify: "restart docker"
+#- name: Configure Docker
+#  template:
+#    src: daemon.json.j2
+#    dest: /etc/docker/daemon.json
+#    owner: root
+#  notify: "restart docker"
 
   # if the server isn't restarted now, the network definition diseppeaer after the
   # next restart
