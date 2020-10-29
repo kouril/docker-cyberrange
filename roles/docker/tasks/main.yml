@@ -42,7 +42,12 @@
 - name: Reload ansible_local
   setup: filter=ansible_local
 
-- name: Define a bridged network
+#- name: Define a bridged network
+#  shell:
+#    cmd: docker network create -d macvlan -o parent=eth0 --subnet={{ ipv4_subnet }} --gateway={{ ipv4_gateway }} external_bridged
+#  when: not "trainining_network" in ansible_facts['ansible_local']['docker']['networks']
+
+- name: Define a custom network
   shell:
-    cmd: docker network create -d macvlan -o parent=eth0 --subnet={{ ipv4_subnet }} --gateway={{ ipv4_gateway }} external_bridged
-  when: not "external_bridged" in ansible_facts['ansible_local']['docker']['networks']
+    cmd: docker network create --subnet={{ ipv4_subnet }} training_network
+  when: not "training_network" in ansible_facts['ansible_local']['docker']['networks']
