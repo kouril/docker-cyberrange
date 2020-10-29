@@ -1,0 +1,40 @@
+---
+- name: "Create custom fact directory"
+  file:
+    path: "/etc/ansible/facts.d"
+    state: "directory"
+
+- name: "Insert custom fact file to check LXC containers"
+  copy:
+    src: docker-containers.fact
+    dest: /etc/ansible/facts.d/docker-containers.fact
+    mode: 0755
+
+- name: Reload ansible_local
+  setup: filter=ansible_local
+
+- name: Create a container
+  shell:
+    cmd: "{{ item.launch }}"
+# when: not {{ item.name }} in ... -> yeilds a warning about jinja2 templating used
+  when:
+    - not item.name|string in ansible_facts['ansible_local']['docker-containers']
+    - item.type == "docker"
+  loop: "{{ containers }}"
+
+#- name: Create a container
+#  vars:
+#     lxcconfig: "{{ lookup('template', 'container-config.yml') }}"
+#  community.general.lxd_container:
+#    name: "{{ item.name }}"
+#    state: started
+#    config: "{{ lxcconfig }}"
+#    source:
+#      type: image
+#      mode: pull
+#      server: https://images.linuxcontainers.org
+#      protocol: lxd # if you get a 404, try setting protocol: simplestreams
+#      alias: ubuntu/xenial/amd64
+#  when: not item.name|string in ansible_facts['ansible_local']['lxc']['containers']
+## when: not {{ item.name }} in ... -> yeilds a warning about jinja2 templating used
+#  loop: "{{ containers }}"
