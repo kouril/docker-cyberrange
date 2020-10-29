@@ -9,6 +9,12 @@
     - "vars/training_nodes.yml"
 
   tasks:
+    - name: Adapt SSH client configuration
+      copy:
+        src: ssh_config.conf
+        dest: /etc/ssh/ssh_config.d/training.conf
+        owner: root
+
     - name: Prepare Ansible playbook for the second stage
       git:
         repo: root@192.168.4.26:/root/deployment.git
@@ -18,12 +24,6 @@
       apt:
         name: ansible
         update_cache: yes
-
-    - name: Adapt SSH client configuration
-      copy:
-        src: ssh_config.conf
-        dest: /etc/ssh/ssh_config.d/training.conf
-        owner: root
 
     - name: Create /etc/hosts records
       lineinfile:
