@@ -1,13 +1,10 @@
 ---
 containers:
-  - name: stage1
+  - name: task1
     ipv4_address: 10.0.10.10
-    image: images:debian/buster/cloud
-    type: lxd
-  - name: stage2
-    ipv4_address: 10.0.10.11
-    image: images:debian/buster/cloud
-    type: lxd
-  - name: stage3
-    ipv4_address: 10.0.10.13
+    launch: docker run -d --network=training_network --ip 10.0.10.10 --name task1 --cap-add=SYS_ADMIN --security-opt apparmor=unconfined ubuntu-egi2020 /usr/sbin/sshd -D
+    type: docker
+  - name: task2
+    ipv4_address: 10.0.10.20
+    launch: docker run -d --network=training_network --ip 10.0.10.20 --name task2 -v /var/run/docker.sock:/var/run/docker.sock ubuntu-egi2020 /usr/sbin/sshd -D
     type: docker
