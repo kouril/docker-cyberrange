@@ -1,0 +1,19 @@
+---
+- name: Install gpg
+  apt:
+    name: gpg
+    update_cache: yes
+
+- name: Add the Docker repository key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    id: 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
+
+- name: Add Docker repository
+  apt_repository:
+    repo: deb https://download.docker.com/linux/ubuntu focal stable
+
+- name: Install Docker
+  apt:
+    name: [ docker-ce, docker-ce-cli, containerd.io ]
+    update_cache: yes
