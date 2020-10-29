@@ -8,13 +8,6 @@
     - "vars/training_network.yml"
 
   pre_tasks:
-    - name: Debian 10 required
-      assert:
-        that:
-          - ansible_distribution == "Debian"
-          - ansible_distribution_major_version == "10"
-        msg: "Debian 10 is required"
-
     - name: Install dependencies, avoid a warning
       raw: "{{ item }}"
       loop:
