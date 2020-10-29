@@ -13,4 +13,14 @@ for line in result.stdout.decode('utf8').splitlines():
         continue
     networks.append(line.split()[1])
 
-print(json.dumps({ 'networks' : networks }))
+result = subprocess.run(['docker', 'image', 'ls'], stdout=subprocess.PIPE, check=True)
+images = []
+first = True
+for line in result.stdout.decode('utf8').splitlines():
+    if first:
+        first = False
+        continue
+    images.append(line.split()[0])
+
+
+print(json.dumps({ 'networks' : networks, 'images' : images }))
