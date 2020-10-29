@@ -15,30 +15,17 @@
         dest: /etc/ssh/ssh_config.d/training.conf
         owner: root
 
-    - name: Prepare Ansible playbook for the second stage
-      git:
-        repo: root@192.168.4.26:/root/deployment.git
-        dest: /root/deployment
-
-    - name: Install Ansible
-      apt:
-        name: ansible
-        update_cache: yes
-
     - name: Create /etc/hosts records
       lineinfile:
         path: /etc/hosts
         line: "{{ item.ipv4_address }} {{ item.name }}"
       loop: "{{ containers }}"
 
-    - name: Create list of nodes to install in the second stage
-      template:
-        src: inventory.j2
-        dest: /root/inner-hosts
-
 
   roles:
     - role: common
+
+    - role: docker
 
     - role: users
       vars:
@@ -46,8 +33,6 @@
           - name: "training"
             passwd: "strudl"
             ssh_priv_key_path: "ssh/user"
+            groups: "docker"
           - name: "root"
             ssh_priv_key_path: "ssh/master"
-
-    - role: lxd
-    - role: lxd-container
