@@ -26,7 +26,8 @@
   service:
     name: docker
     enabled: yes
-    state: restarted
+#    state: restarted
+    state: started
 
 - name: "Create custom fact directory"
   file:
