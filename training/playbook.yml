@@ -8,20 +8,6 @@
     - "vars/training_network.yml"
     - "vars/training_nodes.yml"
 
-  tasks:
-    - name: Adapt SSH client configuration
-      copy:
-        src: ssh_config.conf
-        dest: /etc/ssh/ssh_config.d/training.conf
-        owner: root
-
-    - name: Create /etc/hosts records
-      lineinfile:
-        path: /etc/hosts
-        line: "{{ item.ipv4_address }} {{ item.name }}"
-      loop: "{{ containers }}"
-
-
   roles:
     - role: common
 
@@ -36,5 +22,8 @@
             passwd: "20202020"
             ssh_priv_key_path: "ssh/user"
             groups: "docker"
+
+    # just to make sure it runs before containers
+    - role: training
 
     - role: docker-containers
