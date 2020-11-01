@@ -6,5 +6,5 @@ containers:
     type: docker
   - name: task2
     ipv4_address: 10.0.10.20
-    launch: docker run -d --network=training_network --ip 10.0.10.20 --name task2 -v /var/run/docker.sock:/var/run/docker.sock ubuntu-egi2020 /usr/sbin/sshd -D
+    launch: docker run -d --network=training_network --ip 10.0.10.20 --name task2 -v /root/task2/ssh/:/root/.ssh -v /var/run/docker.sock:/var/run/docker.sock ubuntu-egi2020 /usr/sbin/sshd -D
     type: docker
