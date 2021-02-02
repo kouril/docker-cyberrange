@@ -1,0 +1,47 @@
+name: small-test
+provider: OpenStack
+
+hosts:
+  - name: server1
+    base_box:
+      image: debian-10-x86_64
+      man_user: debian
+    flavor: csirtmu.tiny1x2
+
+  - name: server2
+    base_box:
+      image: debian-10-x86_64
+      man_user: debian
+    flavor: csirtmu.small2x8
+    hidden: True
+
+routers:
+  - name: router
+    cidr: 100.100.100.0/29
+    base_box:
+      image: debian-9-x86_64
+      man_user: debian
+    flavor: csirtmu.tiny1x2
+
+networks:
+  - name: lan1
+    cidr: 10.10.20.0/24
+
+net_mappings:
+    - host: server1
+      network: lan1
+      ip: 10.10.20.2
+
+    - host: server2
+      network: lan1
+      ip: 10.10.20.3
+
+router_mappings:
+    - router: router
+      network: lan1
+      ip: 10.10.20.1
+
+groups:
+  - name: user-accessible
+    nodes:
+      - server1
