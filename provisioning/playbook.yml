@@ -9,4 +9,3 @@
     - name: disable qxl
       include_role:
         name: kypo-disable-qxl
-      when: ansible_os_family == 'Debian'
