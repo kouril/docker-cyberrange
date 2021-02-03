@@ -30,11 +30,11 @@ networks:
 net_mappings:
     - host: server1
       network: lan1
-      ip: 10.10.20.2
+      ip: 10.10.20.5
 
     - host: server2
       network: lan1
-      ip: 10.10.20.3
+      ip: 10.10.20.10
 
 router_mappings:
     - router: router
