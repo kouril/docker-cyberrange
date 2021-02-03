@@ -54,11 +54,16 @@
   when: not "training_network" in ansible_facts['ansible_local']['docker']['networks']
 
 - name: Transfer the custom image
-  copy:
-    src: "{{ image }}.tar"
+  synchronize:
+    src: "{{ image }}.tar.xz"
     dest: /tmp
   when: image is defined
   register: tranferred
+
+- name: Uncompress the image
+  shell:
+    cmd: xz -d /tmp/{{ image }}.tar.xz
+  when: tranferred.changed
 
 - name: Load the image
   shell:
