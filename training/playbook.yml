@@ -1,12 +1,12 @@
 ---
 
-- hosts: all
+- name: Prepare the main host
+  hosts: main
   become: yes
 
   vars_files:
     - "vars/root_ssh_keys.yml"
     - "vars/training_network.yml"
-    - "vars/training_nodes.yml"
 
   roles:
     - role: common
@@ -21,9 +21,32 @@
           - name: "training"
             passwd: "20202020"
             ssh_priv_key_path: "ssh/user"
+          - name: "david"
+            passwd: "kelsey"
             groups: "docker"
 
     # just to make sure it runs before containers
     - role: training
 
     - role: docker-containers
+      vars:
+        containers:
+          - name: task1
+            ipv4_address: 10.0.10.10
+            launch: docker run -d --network=training_network --ip 10.0.10.10 --name task1 --cap-add=SYS_ADMIN --security-opt apparmor=unconfined -v /root/task2/ssh/:/root/.ssh ubuntu-egi2020 /usr/sbin/sshd -D
+            type: docker
+
+- name: Prepare the secondary host
+  hosts: remote_docker
+  become: yes
+
+  vars_files:
+    - "vars/root_ssh_keys.yml"
+    - "vars/training_network.yml"
+
+  roles:
+    - role: common
+
+    - role: docker
+      vars:
+        expose_docker: yes
