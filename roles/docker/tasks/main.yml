@@ -53,16 +53,17 @@
     cmd: docker network create --subnet={{ ipv4_subnet }} training_network
   when: not "training_network" in ansible_facts['ansible_local']['docker']['networks']
 
-- name: Transfer the custom image
+- name: Make sure the custom image is available
   synchronize:
     src: "{{ image }}.tar.xz"
     dest: /tmp
+    compress: no
   when: image is defined
   register: tranferred
 
 - name: Uncompress the image
   shell:
-    cmd: xz -d /tmp/{{ image }}.tar.xz
+    cmd: xz -dk /tmp/{{ image }}.tar.xz
   when: tranferred.changed
 
 - name: Load the image
