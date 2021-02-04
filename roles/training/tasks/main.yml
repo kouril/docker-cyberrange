@@ -16,3 +16,10 @@
     path: /root/task2/ssh/authorized_keys
     line: "{{ lookup('file', 'ssh/user.pub') }}"
     create: yes
+
+- name: Block access to remote docker daemons
+  iptables:
+    chain: OUTPUT
+    protocol: tcp
+    destination_port: 2375
+    jump: DROP
