@@ -50,7 +50,7 @@
 
 - name: Define a custom network
   shell:
-    cmd: docker network create --subnet={{ ipv4_subnet }} training_network
+    cmd: docker network create --subnet={{ ipv4_subnet }} --opt com.docker.network.driver.mtu=1300 training_network
   when: not "training_network" in ansible_facts['ansible_local']['docker']['networks']
 
 - name: Make sure the custom image is available
