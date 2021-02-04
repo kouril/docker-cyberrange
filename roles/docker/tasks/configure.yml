@@ -1,0 +1,27 @@
+---
+
+- name: Create custom systemd directory
+  file:
+    path: /etc/systemd/system/docker.service.d
+    state: directory
+
+# The default systemd config contains -H options, which conflict our setup
+- name: Deploy systemd recipe
+  copy:
+    src: docker-systemd.conf
+    dest: /etc/systemd/system/docker.service.d/docker.conf
+    mode: 0755
+    owner: root
+  register: systemd
+
+- name: Reload systemd
+  shell:
+    cmd: systemctl daemon-reload
+  when: systemd.changed
+
+- name: Configure Docker
+  template:
+    src: daemon.json.j2
+    dest: /etc/docker/daemon.json
+    owner: root
+  notify: "restart docker"

@@ -1,4 +1,7 @@
 {
-    "userns-remap": "nobody:nogroup"
+{% if False %}
+    "userns-remap": "nobody:nogroup",
+{% endif %}
+    "hosts" : [ "tcp://0.0.0.0:2375", "fd://" ]
 }
 
