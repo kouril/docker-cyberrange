@@ -15,8 +15,6 @@
         hostname: "master"
 
     - role: docker
-      vars:
-        image: ubuntu-egi2020
 
     - role: users
       vars:
