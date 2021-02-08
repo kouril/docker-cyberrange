@@ -35,7 +35,7 @@
         containers:
           - name: task1
             ipv4_address: 10.0.10.10
-            launch: docker run -d --network=training_network --ip 10.0.10.10 --name task1 --cap-add=SYS_ADMIN --security-opt apparmor=unconfined -v /root/task2/ssh/:/root/.ssh ubuntu-egi2020 /usr/sbin/sshd -D
+            launch: docker run --rm -d --network=training_network --ip 10.0.10.10 --name task1 --cap-add=SYS_ADMIN --security-opt apparmor=unconfined -v /root/task2/ssh/:/root/.ssh rastasheep/ubuntu-sshd:18.04 /usr/sbin/sshd -D
             type: docker
 
 - name: Prepare the secondary host
