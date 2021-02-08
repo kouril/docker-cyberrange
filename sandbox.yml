@@ -2,7 +2,7 @@ name: small-test
 provider: OpenStack
 
 hosts:
-  - name: master
+  - name: main
     base_box:
       image: ubuntu-focal-x86_64
       man_user: ubuntu
@@ -28,7 +28,7 @@ networks:
     cidr: 10.20.30.0/24
 
 net_mappings:
-    - host: master
+    - host: main
       network: training
       ip: 10.20.30.100
 
@@ -44,4 +44,4 @@ router_mappings:
 groups:
   - name: user-accessible
     nodes:
-      - master
+      - main
