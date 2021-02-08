@@ -10,6 +10,8 @@
 
   roles:
     - role: common
+      vars:
+        hostname: "master"
 
     - role: docker
       vars:
@@ -46,6 +48,8 @@
 
   roles:
     - role: common
+      vars:
+        hostname: task2
 
     - role: docker
       vars:
