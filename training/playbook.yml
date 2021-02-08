@@ -29,6 +29,8 @@
 
     # just to make sure it runs before containers
     - role: training
+      vars:
+        docker_server: "10.20.30.49"
 
     - role: docker-containers
       vars:
