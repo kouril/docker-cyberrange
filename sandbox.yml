@@ -8,7 +8,7 @@ hosts:
       man_user: ubuntu
     flavor: csirtmu.tiny1x4
 
-  - name: task2
+  - name: jenkins-runner
     base_box:
       image: ubuntu-focal-x86_64
       man_user: ubuntu
@@ -32,7 +32,7 @@ net_mappings:
       network: training
       ip: 10.20.30.100
 
-    - host: task2
+    - host: jenkins-runner
       network: training
       ip: 10.20.30.49
 
