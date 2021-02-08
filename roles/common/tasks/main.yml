@@ -9,9 +9,7 @@
   timezone:
     name: Europe/Prague
 
-#- name: Set SSH keys for root
-#  authorized_key:
-#    user: root
-#    state: present
-#    key: "{{ item }}"
-#  loop: "{{ root_ssh_keys }}"
+- name: Set hostname
+  hostname:
+    name: "{{ hostname }}"
+  when: hostname is defined
