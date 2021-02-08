@@ -21,5 +21,5 @@
   iptables:
     chain: OUTPUT
     protocol: tcp
-    destination_port: 2375
+    destination_port: "2375"
     jump: DROP
