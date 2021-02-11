@@ -40,7 +40,7 @@
             type: docker
 
 - name: Prepare the secondary host
-  hosts: remote_docker
+  hosts: jenkins_runner
   become: yes
 
   vars_files:
