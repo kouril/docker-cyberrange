@@ -7,7 +7,6 @@
   vars_files:
     - "vars/root_ssh_keys.yml"
     - "vars/training_network.yml"
-    - "vars/task3.yml"
 
   roles:
     - role: common
@@ -22,22 +21,10 @@
           - name: "training"
             passwd: "20202020"
             ssh_priv_key_path: "ssh/user"
-          - name: "{{ task3_username }}"
-            passwd: "{{ task3_password }}"
             groups: "docker"
 
     # just to make sure it runs before containers
     - role: training
-      vars:
-        docker_server: "10.20.30.49"
-
-    - role: docker-containers
-      vars:
-        containers:
-          - name: task1
-            ipv4_address: 10.0.10.10
-            launch: docker run --rm -d --network=training_network --ip 10.0.10.10 --name task1 --cap-add=SYS_ADMIN --security-opt apparmor=unconfined -v /root/task2/ssh/:/root/.ssh rastasheep/ubuntu-sshd:18.04 /usr/sbin/sshd -D
-            type: docker
 
 - name: Prepare the secondary host
   hosts: jenkins_runner
@@ -46,7 +33,6 @@
   vars_files:
     - "vars/root_ssh_keys.yml"
     - "vars/training_network.yml"
-    - "vars/task3.yml"
 
   roles:
     - role: common
@@ -58,3 +44,17 @@
         expose_docker: yes
 
     - role: training
+      vars:
+        docker_server: "10.0.10.1"
+
+    - role: docker-containers
+      vars:
+        containers:
+          - name: jenkins-dev
+            launch: docker run --rm -d --name jenkins-dev -v /root/tasks/ssh/:/root/.ssh -v /root/tasks/etc/jenkins:/etc/jenkins -p 2222:22 rastasheep/ubuntu-sshd:18.04 /usr/sbin/sshd -D
+            type: docker
+
+          - name: cgroups
+            ipv4_address: 10.0.10.10
+            launch: docker run --rm -d --network=training_network --ip 10.0.10.10 --name cgroups --cap-add=SYS_ADMIN --security-opt apparmor=unconfined -v /root/tasks/ssh/:/root/.ssh -p 62222:22 rastasheep/ubuntu-sshd:18.04 /usr/sbin/sshd -D
+            type: docker

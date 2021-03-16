@@ -1,5 +1,4 @@
 ---
-
 - include_tasks: "artifacts-{{ group }}.yml"
   loop: "{{ group_names }}"
   loop_control:

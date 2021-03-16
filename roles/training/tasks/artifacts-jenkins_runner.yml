@@ -1,7 +1,26 @@
 ---
-- name: Docker probe
-  template:
-    src: docker_probe.j2
-    dest: /usr/local/sbin/docker_probe
-    owner: root
+#- name: Docker probe
+#  template:
+#    src: docker_probe.j2
+#    dest: /usr/local/sbin/docker_probe
+#    owner: root
+#    mode: 0700
+
+- name: Prepare authorized_keys for tasks
+  lineinfile:
+    path: /root/tasks/ssh/authorized_keys
+    line: "{{ lookup('file', 'ssh/user.pub') }}"
+    create: yes
+
+- name: Jenkins configuration location
+  file:
+    path: /root/tasks/etc/jenkins
     mode: 0700
+    owner: root
+    state: directory
+
+- name: Jenkins configuration with exposed docker endpoint
+  template:
+    src: pipeline-build.conf.j2
+    dest: /root/tasks/etc/jenkins/pipeline-build.conf
+    owner: root
