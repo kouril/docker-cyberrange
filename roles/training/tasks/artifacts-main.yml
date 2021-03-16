@@ -1,0 +1,38 @@
+---
+- name: Adapt SSH client configuration
+  copy:
+    src: ssh_config.conf
+    dest: /etc/ssh/ssh_config.d/training.conf
+    owner: root
+
+- name: Create /etc/hosts records
+  lineinfile:
+    path: /etc/hosts
+    line: "{{ item.ipv4_address }} {{ item.name }}"
+  loop: "{{ containers }}"
+
+- name: Prepare authorized_keys for task1
+  lineinfile:
+    path: /root/task2/ssh/authorized_keys
+    line: "{{ lookup('file', 'ssh/user.pub') }}"
+    create: yes
+
+- name: Block access to remote docker daemons
+  iptables:
+    chain: OUTPUT
+    protocol: tcp
+    destination_port: "2375"
+    jump: DROP
+
+- name: Create jenkins configuration location
+  file:
+    path: /etc/jenkins
+    mode: 0700
+    owner: root
+    state: directory
+
+- name: Jenkins configuration with exposed docker endpoint
+  template:
+    src: pipeline-build.conf.j2
+    dest: /etc/jenkins/pipeline-build.conf
+    owner: root

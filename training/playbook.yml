@@ -48,14 +48,6 @@
     - "vars/training_network.yml"
     - "vars/task3.yml"
 
-  tasks:
-    - name: Docker probe
-      template:
-        src: docker_probe.j2
-        dest: /usr/local/sbin/docker_probe
-        owner: root
-        mode: 0700
-
   roles:
     - role: common
       vars:
@@ -64,3 +56,5 @@
     - role: docker
       vars:
         expose_docker: yes
+
+    - role: training
