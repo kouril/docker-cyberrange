@@ -1,10 +1,10 @@
 ---
-#- name: Docker probe
-#  template:
-#    src: docker_probe.j2
-#    dest: /usr/local/sbin/docker_probe
-#    owner: root
-#    mode: 0700
+- name: Docker probe
+  template:
+    src: docker_probe.j2
+    dest: /usr/local/sbin/docker_probe
+    owner: root
+    mode: 0700
 
 - name: Prepare authorized_keys for tasks
   lineinfile:

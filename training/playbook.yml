@@ -7,6 +7,7 @@
   vars_files:
     - "vars/root_ssh_keys.yml"
     - "vars/training_network.yml"
+    - "vars/task3.yml"
 
   roles:
     - role: common
@@ -22,8 +23,8 @@
             passwd: "20202020"
             ssh_priv_key_path: "ssh/user"
             groups: "docker"
-          - name: "david"
-            passwd: "rekcod"
+          - name: "{{ task3_username }}"
+            passwd: "{{ task3_password }}"
 
     # just to make sure it runs before containers
     - role: training
@@ -35,6 +36,7 @@
   vars_files:
     - "vars/root_ssh_keys.yml"
     - "vars/training_network.yml"
+    - "vars/task3.yml"
 
   roles:
     - role: common
