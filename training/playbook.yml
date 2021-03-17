@@ -22,6 +22,8 @@
             passwd: "20202020"
             ssh_priv_key_path: "ssh/user"
             groups: "docker"
+          - name: "david"
+            passwd: "rekcod"
 
     # just to make sure it runs before containers
     - role: training
