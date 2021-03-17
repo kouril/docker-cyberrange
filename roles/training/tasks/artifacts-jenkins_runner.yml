@@ -24,3 +24,10 @@
     src: pipeline-build.conf.j2
     dest: /root/tasks/etc/jenkins/pipeline-build.conf
     owner: root
+
+- name: Flag for the cgroup task is available
+  copy:
+    content: "The flag is 'Glass'"
+    dest: /etc/cgroups-flag.txt
+    mode: 0700
+    owner: root
