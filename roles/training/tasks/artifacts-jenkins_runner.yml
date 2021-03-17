@@ -27,7 +27,7 @@
 
 - name: Flag for the cgroup task is available
   copy:
-    content: "The flag is 'Glass'"
+    content: "The flag is 'mouse'"
     dest: /etc/cgroups-flag.txt
     mode: 0700
     owner: root
