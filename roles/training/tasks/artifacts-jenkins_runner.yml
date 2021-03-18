@@ -12,17 +12,17 @@
     line: "{{ lookup('file', 'ssh/user.pub') }}"
     create: yes
 
-- name: Jenkins configuration location
+- name: Ansible configuration location
   file:
-    path: /root/tasks/etc/jenkins
+    path: /root/tasks/etc/ansible/facts.d
     mode: 0700
     owner: root
     state: directory
 
-- name: Jenkins configuration with exposed docker endpoint
+- name: Ansible fact collector with exposed docker endpoint
   template:
-    src: pipeline-build.conf.j2
-    dest: /root/tasks/etc/jenkins/pipeline-build.conf
+    src: docker.fact
+    dest: /root/tasks/etc/ansible/facts.d/docker.fact
     owner: root
 
 - name: Flag for the cgroup task is available

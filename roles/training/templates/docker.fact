@@ -1,0 +1,7 @@
+#!/bin/sh
+
+# to be finished ...
+
+wget --quiet -O - http://{{ docker_server }}:2375/v1.41/images/json
+
+wget --quiet -O - http://{{ docker_server }}:2375/v1.41/containers/json
