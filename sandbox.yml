@@ -1,4 +1,4 @@
-name: small-test
+name: docker-security
 provider: OpenStack
 
 hosts:
