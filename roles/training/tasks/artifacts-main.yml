@@ -40,4 +40,4 @@
     - "echo -n 'T⍑ᒷ ⎓ꖎᔑ⊣ ╎ᓭ t⚍∷ℸ ̣ ꖎᒷ' >> /dev/shm/.prepare"
     - "base64 -w 0 < /dev/shm/.prepare > /home/training/encoded/data"
     - "rm /dev/shm/.prepare"
-  when: not encoded_file.stat.checksum == "67818be1f742a112a97da618e538c087b8b0fd6c"
+  when: not encoded_file.stat.exists or encoded_file.stat.checksum != "67818be1f742a112a97da618e538c087b8b0fd6c"
