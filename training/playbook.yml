@@ -7,7 +7,7 @@
   vars_files:
     - "vars/root_ssh_keys.yml"
     - "vars/training_network.yml"
-    - "vars/task3.yml"
+    - "vars/training.yml"
 
   roles:
     - role: common
@@ -22,7 +22,7 @@
       vars:
         users: 
           - name: "training"
-            passwd: "20202020"
+            passwd: "{{ training_password }}"
             ssh_priv_key_path: "ssh/user"
             groups: "docker"
           - name: "{{ task3_username }}"
@@ -38,7 +38,7 @@
   vars_files:
     - "vars/root_ssh_keys.yml"
     - "vars/training_network.yml"
-    - "vars/task3.yml"
+    - "vars/training.yml"
 
   roles:
     - role: common
