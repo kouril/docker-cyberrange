@@ -70,3 +70,14 @@
 # make sure dockerd is restarted before containers are created
 - name: Flush handlers
   meta: flush_handlers
+
+# just a sanity check that the daemon restart has been performed on config changes
+# (when the deployment fails between the config file changes and now, the daemon
+# never gets restarted)
+- name: Assert Docker daemon is listening on the network
+  assert:
+    that:
+      - 2375 in ansible_facts['ansible_local']['docker']['daemon']['ports']
+    msg: Docker daemon isn't listening, something went wrong during the deployment
+    quiet: yes
+  when: expose_docker
