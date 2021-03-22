@@ -66,3 +66,7 @@
   shell:
     cmd: docker load < "/tmp/{{ image }}.tar"
   when: tranferred.changed
+
+# make sure dockerd is restarted before containers are created
+- name: Flush handlers
+  meta: flush_handlers
