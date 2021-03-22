@@ -59,8 +59,8 @@
             # cgroups should be started first, to make sure (?) it's listed first in the mounts (needed to pass)
           - name: cgroups
             ipv4_address: 10.0.10.10
-            launch: docker run --rm -d --network=training_network --ip 10.0.10.10 --name cgroups --hostname cgroups --cap-add=SYS_ADMIN --security-opt apparmor=unconfined -v /root/tasks/ssh/:/root/.ssh -p 62222:22 rastasheep/ubuntu-sshd:18.04 /usr/sbin/sshd -D
+            launch: docker run -d --restart unless-stopped --network=training_network --ip 10.0.10.10 --name cgroups --hostname cgroups --cap-add=SYS_ADMIN --security-opt apparmor=unconfined -v /root/tasks/ssh/:/root/.ssh -p 62222:22 rastasheep/ubuntu-sshd:18.04 /usr/sbin/sshd -D
             type: docker
           - name: jenkins-dev
-            launch: docker run --rm -d --network=training_network --name jenkins-dev --hostname jenkins-dev -v /root/tasks/ssh/:/root/.ssh -v /root/tasks/etc/ansible:/etc/ansible -p 2222:22 rastasheep/ubuntu-sshd:18.04 /usr/sbin/sshd -D
+            launch: docker run -d --restart unless-stopped --network=training_network --name jenkins-dev --hostname jenkins-dev -v /root/tasks/ssh/:/root/.ssh -v /root/tasks/etc/ansible:/etc/ansible -p 2222:22 rastasheep/ubuntu-sshd:18.04 /usr/sbin/sshd -D
             type: docker
