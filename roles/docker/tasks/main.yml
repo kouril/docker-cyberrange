@@ -16,14 +16,14 @@
 - include_tasks: "configure.yml"
   when: expose_docker
 
-  # if the server isn't restarted now, the network definition diseppeaer after the
-  # next restart
-- name: Ensure Docker is running
-  service:
-    name: docker
-    enabled: yes
-#    state: restarted
-    state: started
+#  # if the server isn't restarted now, the network definition diseppeaer after the
+#  # next restart
+#- name: Ensure Docker is running
+#  service:
+#    name: docker
+#    enabled: yes
+##    state: restarted
+#    state: started
 
 - name: "Create custom fact directory"
   file:
