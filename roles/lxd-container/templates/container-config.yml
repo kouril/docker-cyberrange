@@ -1,0 +1,23 @@
+config:
+  security.nesting: true
+  security.privileged: true
+  user.user-data: |
+    #cloud-config
+    packages:
+      - openssh-server
+    users:
+     - name: root
+       ssh-authorized-keys: {{ root_ssh_keys }}
+  user.network-config: |
+    version: 1
+    config:
+      - type: physical
+        name: eth0
+        subnets:
+          - type: static
+            ipv4: true
+            address: {{ item.ipv4_address }}
+            netmask: 255.255.255.0
+            gateway: {{ ipv4_gateway }}
+            dns_nameservers: {{ dns_nameservers }}
+            control: auto

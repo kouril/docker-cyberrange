@@ -1,0 +1,25 @@
+---
+# Very basic setup to mediate access and basic Ansible deps. It must be run with a sufficient privs
+
+- hosts: all
+  become_method: sudo
+  become: yes
+  gather_facts: no
+  remote_user: ubuntu
+
+  vars_files:
+    - "vars/root_ssh_keys.yml"
+
+  pre_tasks:
+    - name: Make sure Python is available
+      raw: "{{ item }}"
+      loop:
+        - sudo apt-get update
+        - sudo apt-get -y install python3
+  tasks:
+    - name: Set SSH keys for root
+      authorized_key:
+        user: root
+        state: present
+        key: "{{ item }}"
+      loop: "{{ root_ssh_keys }}"

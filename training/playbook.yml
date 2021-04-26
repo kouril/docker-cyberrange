@@ -1,0 +1,66 @@
+---
+
+- name: Prepare the main host
+  hosts: main
+  become: yes
+
+  vars_files:
+    - "vars/root_ssh_keys.yml"
+    - "vars/training_network.yml"
+    - "vars/training.yml"
+
+  roles:
+    - role: common
+      vars:
+        hostname: "main"
+
+    - role: docker
+      vars:
+        image: "alpine-flag"
+
+    - role: users
+      vars:
+        users: 
+          - name: "training"
+            passwd: "{{ training_password }}"
+            ssh_priv_key_path: "ssh/user"
+            groups: "docker"
+          - name: "{{ task3_username }}"
+            passwd: "{{ task3_password }}"
+
+    # just to make sure it runs before containers
+    - role: training
+
+- name: Prepare the secondary host
+  hosts: jenkins_runner
+  become: yes
+
+  vars_files:
+    - "vars/root_ssh_keys.yml"
+    - "vars/training_network.yml"
+    - "vars/training.yml"
+
+  roles:
+    - role: common
+      vars:
+        hostname: jenkins-runner
+
+    - role: docker
+      vars:
+        expose_docker: yes
+
+    - role: training
+      vars:
+        docker_server: "10.0.10.1"
+
+    - role: docker-containers
+      vars:
+        containers:
+            # cgroups should be started first, to make sure (?) it's listed first in the mounts (needed to pass)
+          - name: cgroups
+            ipv4_address: 10.0.10.10
+            launch: docker run -d --restart unless-stopped --network=training_network --ip 10.0.10.10 --name cgroups --hostname cgroups --cap-add=SYS_ADMIN --security-opt apparmor=unconfined -v /root/tasks/ssh/:/root/.ssh -p 62222:22 rastasheep/ubuntu-sshd:18.04 /usr/sbin/sshd -D
+            type: docker
+          - name: jenkins-dev
+            launch: docker run -d --restart unless-stopped --network=training_network --name jenkins-dev --hostname jenkins-dev -v /root/tasks/ssh/:/root/.ssh -v /root/tasks/etc/ansible:/etc/ansible -p 2222:22 rastasheep/ubuntu-sshd:18.04 /usr/sbin/sshd -D
+            type: docker

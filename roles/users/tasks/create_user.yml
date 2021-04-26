@@ -1,0 +1,40 @@
+---
+- name: Add user to system
+  user:
+    name: "{{ item.name }}"
+    shell: "/bin/bash"
+    state: present
+  register: user_created
+
+- name: Change the user's password
+  user:
+    name: "{{ item.name }}"
+    password: "{{ item.passwd  | password_hash('sha512', 'zasoleno') }}"
+  when: item.passwd is defined
+
+- name: Add the user to group
+  user:
+    name: "{{ item.name }}"
+    append: yes
+    groups: "{{ item.groups }}"
+  when: item.groups is defined
+
+- name: Create user's SSH directory
+  file:
+    path: "{{ user_created.home }}/.ssh"
+    state: directory
+
+- name: Drop user's SSH private keys
+  copy:
+    src: "{{ item.ssh_priv_key_path }}"
+    dest: "{{ user_created.home }}/.ssh/id_rsa"
+    mode: 0600
+    owner: "{{ item.name }}"
+  when: item.ssh_priv_key_path is defined
+
+- name: Allow user's SSH access
+  authorized_key:
+    user: "{{ item.name }}"
+    state: present
+    key: "{{ item.ssh_key }}"
+  when: item.ssh_key is defined

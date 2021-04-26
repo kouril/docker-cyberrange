@@ -1,0 +1,43 @@
+---
+- name: Adapt SSH client configuration
+  copy:
+    src: ssh_config.conf
+    dest: /etc/ssh/ssh_config.d/training.conf
+    owner: root
+
+- name: Create /etc/hosts records
+  lineinfile:
+    path: /etc/hosts
+    line: "{{ item.ipv4_address }} {{ item.name }}"
+  loop: "{{ containers }}"
+  when: containers is defined
+
+- name: Block access to remote docker daemons
+  iptables:
+    chain: OUTPUT
+    protocol: tcp
+    destination_port: "2375"
+    jump: DROP
+
+- name: Directory to store encoded file
+  file:
+    path: /home/training/encoded
+    owner: training
+    state: directory
+
+- name: Check whether encoded file is present
+  stat:
+    path: /home/training/encoded/data
+  register: encoded_file
+
+- name: Encoded file contains the flag
+  shell:
+    cmd: "{{ item }}"
+    warn: false # suppress warnings about using rm
+  loop:
+    - "dd if=/dev/zero of=/dev/shm/.prepare bs=$((4096)) count=32"
+      # Standard Galactic Alphabet, https://lingojam.com/StandardGalacticAlphabet
+    - "echo -n 'T⍑ᒷ ⎓ꖎᔑ⊣ ╎ᓭ t⚍∷ℸ ̣ ꖎᒷ' >> /dev/shm/.prepare"
+    - "base64 -w 0 < /dev/shm/.prepare > /home/training/encoded/data"
+    - "rm /dev/shm/.prepare"
+  when: not encoded_file.stat.exists or encoded_file.stat.checksum != "67818be1f742a112a97da618e538c087b8b0fd6c"

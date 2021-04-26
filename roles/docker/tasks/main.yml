@@ -1,0 +1,83 @@
+---
+- include_tasks: "install-{{ ansible_distribution }}.yml"
+
+- name: Add uid mapping
+  lineinfile:
+    path: /etc/subuid
+    regexp: '^nobody:'
+    line: nobody:886432:65536
+
+- name: Add gid mapping
+  lineinfile:
+    path: /etc/subgid
+    regexp: '^nogroup:'
+    line: nogroup:886432:65536
+
+- include_tasks: "configure.yml"
+  when: expose_docker
+
+#  # if the server isn't restarted now, the network definition diseppeaer after the
+#  # next restart
+#- name: Ensure Docker is running
+#  service:
+#    name: docker
+#    enabled: yes
+##    state: restarted
+#    state: started
+
+- name: "Create custom fact directory"
+  file:
+    path: "/etc/ansible/facts.d"
+    state: "directory"
+
+- name: "Insert custom fact file to check Docker"
+  copy:
+    src: docker.fact
+    dest: /etc/ansible/facts.d/docker.fact
+    mode: 0755
+
+- name: Reload ansible_local
+  setup: filter=ansible_local
+
+#- name: Define a bridged network
+#  shell:
+#    cmd: docker network create -d macvlan -o parent=eth0 --subnet={{ ipv4_subnet }} --gateway={{ ipv4_gateway }} external_bridged
+#  when: not "trainining_network" in ansible_facts['ansible_local']['docker']['networks']
+
+- name: Define a custom network
+  shell:
+    cmd: docker network create --subnet={{ ipv4_subnet }} --opt com.docker.network.driver.mtu=1300 training_network
+  when: not "training_network" in ansible_facts['ansible_local']['docker']['networks']
+
+- name: Make sure the custom image is available
+  synchronize:
+    src: "{{ image }}.tar.xz"
+    dest: /tmp
+    compress: no
+  when: image is defined
+  register: tranferred
+
+- name: Uncompress the image
+  shell:
+    cmd: xz -dk /tmp/{{ image }}.tar.xz
+  when: tranferred.changed
+
+- name: Load the image
+  shell:
+    cmd: docker load < "/tmp/{{ image }}.tar"
+  when: tranferred.changed
+
+# make sure dockerd is restarted before containers are created
+- name: Flush handlers
+  meta: flush_handlers
+
+# just a sanity check that the daemon restart has been performed on config changes
+# (when the deployment fails between the config file changes and now, the daemon
+# never gets restarted)
+- name: Assert Docker daemon is listening on the network
+  assert:
+    that:
+      - 2375 in ansible_facts['ansible_local']['docker']['daemon']['ports']
+    msg: Docker daemon isn't listening, something went wrong during the deployment
+    quiet: yes
+  when: expose_docker

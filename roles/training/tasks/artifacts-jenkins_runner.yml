@@ -1,0 +1,33 @@
+---
+- name: Docker probe
+  template:
+    src: docker_probe.j2
+    dest: /usr/local/sbin/docker_probe
+    owner: root
+    mode: 0700
+
+- name: Prepare authorized_keys for tasks
+  lineinfile:
+    path: /root/tasks/ssh/authorized_keys
+    line: "{{ lookup('file', 'ssh/user.pub') }}"
+    create: yes
+
+- name: Ansible configuration location
+  file:
+    path: /root/tasks/etc/ansible/facts.d
+    mode: 0700
+    owner: root
+    state: directory
+
+- name: Ansible fact collector with exposed docker endpoint
+  template:
+    src: docker.fact
+    dest: /root/tasks/etc/ansible/facts.d/docker.fact
+    owner: root
+
+- name: Flag for the cgroup task is available
+  copy:
+    content: "The flag is 'mouse'"
+    dest: /etc/cgroups-flag.txt
+    mode: 0700
+    owner: root

@@ -1,0 +1,11 @@
+#!/usr/bin/python3
+  
+import json
+import subprocess
+
+result = subprocess.run(['docker', 'ps', '--format', '{{ .ID }}\t{{.Image}}\t{{ .Names }}'], stdout=subprocess.PIPE, check=True)
+containers = []
+for line in result.stdout.decode('utf8').splitlines():
+    containers.append(line.split('\t')[2])
+
+print(json.dumps(containers))

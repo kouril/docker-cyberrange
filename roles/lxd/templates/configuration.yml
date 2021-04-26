@@ -1,0 +1,32 @@
+config:
+  images.auto_update_interval: "0"
+networks:
+- config:
+    bridge.mtu: "1300"
+    ipv4.address: {{ lxd_ipv4_address }}
+    ipv4.dhcp.ranges: {{ ipv4_dhcp_range }}
+    ipv4.nat: "true"
+    ipv6.address: none
+  description: ""
+  name: lxdbr0
+  type: bridge
+  project: default
+storage_pools:
+- config:
+    source: /var/snap/lxd/common/lxd/storage-pools/pool-default
+  description: ""
+  name: pool-default
+  driver: dir
+profiles:
+- config: {}
+  description: Default LXD profile
+  devices:
+    eth0:
+      name: eth0
+      network: lxdbr0
+      type: nic
+    root:
+      path: /
+      pool: pool-default
+      type: disk
+  name: default

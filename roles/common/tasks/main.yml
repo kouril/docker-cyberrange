@@ -1,0 +1,15 @@
+---
+- name: Install Ansible dependencies
+  apt:
+    name: python3-apt
+    state: present
+    update_cache: yes
+
+- name: set timezone to Europe/Prague
+  timezone:
+    name: Europe/Prague
+
+- name: Set hostname
+  hostname:
+    name: "{{ hostname }}"
+  when: hostname is defined

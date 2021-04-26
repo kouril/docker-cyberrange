@@ -1,0 +1,7 @@
+node {
+    docker.withServer('tcp://{{ docker_server }}:2375') {
+        docker.image('ubuntu:latest').withRun('do_build') {
+            c -> sh "docker logs ${c.id}"
+        }
+    }
+}
