@@ -71,6 +71,10 @@
 - name: Flush handlers
   meta: flush_handlers
 
+# reload facts for the check below
+- name: Reload ansible_local
+  setup: filter=ansible_local
+
 # just a sanity check that the daemon restart has been performed on config changes
 # (when the deployment fails between the config file changes and now, the daemon
 # never gets restarted)
