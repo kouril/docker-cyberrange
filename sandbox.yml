@@ -1,4 +1,4 @@
-name: docker-security-csirtmu_flavor
+name: docker-security-csirtmu-flavor
 provider: OpenStack
 
 hosts:
