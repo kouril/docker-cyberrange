@@ -17,7 +17,7 @@ hosts:
 
 routers:
   - name: router
-    cidr: 100.100.100.0/29
+    cidr: 192.168.187.0/29
     base_box:
       image: debian-9-x86_64
       man_user: debian
