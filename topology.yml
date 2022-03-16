@@ -1,5 +1,4 @@
 name: docker-security-csirtmu-flavor
-provider: OpenStack
 
 hosts:
   - name: main
@@ -17,7 +16,6 @@ hosts:
 
 routers:
   - name: router
-    cidr: 192.168.187.0/29
     base_box:
       image: debian-9-x86_64
       man_user: debian
