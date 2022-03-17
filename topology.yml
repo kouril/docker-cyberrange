@@ -1,0 +1,45 @@
+name: docker-security-csirtmu-flavor
+
+hosts:
+  - name: main
+    base_box:
+      image: ubuntu-focal-x86_64
+      man_user: ubuntu
+    flavor: csirtmu.tiny1x4
+
+  - name: jenkins-runner
+    base_box:
+      image: ubuntu-focal-x86_64
+      man_user: ubuntu
+    flavor: csirtmu.tiny1x4
+    hidden: True
+
+routers:
+  - name: router
+    base_box:
+      image: debian-9-x86_64
+      man_user: debian
+    flavor: csirtmu.tiny1x2
+
+networks:
+  - name: training
+    cidr: 10.20.30.0/24
+
+net_mappings:
+    - host: main
+      network: training
+      ip: 10.20.30.100
+
+    - host: jenkins-runner
+      network: training
+      ip: 10.20.30.49
+
+router_mappings:
+    - router: router
+      network: training
+      ip: 10.20.30.1
+
+groups:
+  - name: user-accessible
+    nodes:
+      - main

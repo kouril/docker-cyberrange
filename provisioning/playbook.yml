@@ -1,0 +1,15 @@
+- name: setup hosts
+  hosts: all
+  gather_facts: yes
+  become: yes
+  become_user: root
+  tasks:
+    - name: disable qxl
+      include_role:
+        name: kypo-disable-qxl
+
+    - name: Set SSH keys for root
+      authorized_key:
+        user: root
+        state: present
+        key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCtsX/ZB4zZsU+LSdsamKjlrnmSIgiRxBJ5oUQ8NW1IIf4BmAecMQWAYS2xKthBmnRKlU+ouDE0lUIL04C7TKvSsb13rptLv1aCDkoWVxJbMl4eKeFRdhnhSAp6wygDizv6myqXbcWwMgOsXWGNkxkOIp7A2a4Ea83VIlhymIB+x32ig4WMoM16StczpDOtDJuxPX/lRuVHJ3d2KVU2qOQohj5tFwsH0w/sZkNAa2ed8SFoD+f5zNsM2Bd0ShRiqsPUYV6ugCg/Oz/58E9XGbPcrmuhqW42JuhbJHo26hxyiNaYyuzy0doKjzSiASpp+ZN9bAep1tuE0CD0EEl++FkV training master"
