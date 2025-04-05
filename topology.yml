@@ -1,17 +1,17 @@
-name: docker-security-csirtmu-flavor
+name: docker-security
 
 hosts:
   - name: main
     base_box:
       image: ubuntu-focal-x86_64
       man_user: ubuntu
-    flavor: csirtmu.tiny1x4
+    flavor: standard.small
 
   - name: jenkins-runner
     base_box:
       image: ubuntu-focal-x86_64
       man_user: ubuntu
-    flavor: csirtmu.tiny1x4
+    flavor: standard.small
     hidden: True
 
 routers:
@@ -19,7 +19,7 @@ routers:
     base_box:
       image: debian-9-x86_64
       man_user: debian
-    flavor: csirtmu.tiny1x2
+    flavor: standard.small
 
 networks:
   - name: training
