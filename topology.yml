@@ -12,7 +12,6 @@ hosts:
       image: ubuntu-focal-x86_64
       man_user: ubuntu
     flavor: standard.small
-    hidden: True
 
 routers:
   - name: router
